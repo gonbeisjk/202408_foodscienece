@@ -61,7 +61,16 @@
           <?php while (have_posts()): the_post(); ?>
             <section id="post-<?php the_ID(); ?>" <?php post_class('cardList_item'); ?>>
               <a href="<?php the_permalink(); ?>" class="card">
-                <div class="card_label"><span class="label label-black">お知らせ</span></div>
+                <?php
+                $categories = get_the_category();
+                if ($categories) :
+                ?>
+                  <div class="card_label">
+                    <?php foreach ($categories as $category): ?>
+                      <span class="label label-black"><?= $category->name; ?></span>
+                    <?php endforeach; ?>
+                  </div>
+                <?php endif; ?>
                 <div class="card_pic">
                   <?php if (has_post_thumbnail()): ?>
                     <?php the_post_thumbnail('medium'); ?>
