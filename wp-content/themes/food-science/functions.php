@@ -16,6 +16,11 @@ add_theme_support('post-thumbnails');
 add_theme_support('menus');
 
 /**
+ * HTML5をサポートする
+ */
+add_theme_support('html5');
+
+/**
  * タイトルの区切り文字を変更
  */
 add_filter('document_title_separator', 'my_document_title_separator');
