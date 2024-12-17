@@ -1,0 +1,11 @@
+@mixin content-style {
+  h3 {
+    font-weight: 600;
+    border-bottom: 1px solid #ccc;
+  }
+
+  p {
+    line-height: 1.8;
+    margin-bottom: 2em;
+  }
+}

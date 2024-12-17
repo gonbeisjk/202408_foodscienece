@@ -7,11 +7,42 @@
       <p class="kv_subtitle">FROM JAPAN</p>
     </div>
 
-    <div class="kv_slider js-slider">
-      <div class="kv_sliderItem" style="background-image: url('<?= get_template_directory_uri(); ?>/assets/img/home/kv-01@2x.jpg');"></div>
-      <div class="kv_sliderItem" style="background-image: url('<?= get_template_directory_uri(); ?>/assets/img/home/kv-02@2x.jpg');"></div>
-      <div class="kv_sliderItem" style="background-image: url('<?= get_template_directory_uri(); ?>/assets/img/home/kv-03@2x.jpg');"></div>
-    </div>
+    <?php
+    $args = [
+      'post_type' => 'main-visual',
+      'posts_per_page' => -1,
+      'meta_query' => [
+        'relation' => 'OR', //ORなので、下記の条件のいずれか1つ以上に合致しているデータを取得
+        // 公開終了日が未来の場合
+        [
+          'key' => 'end_date',
+          'type' => 'DATETIME',
+          'compare' => '>',
+          'value' => date('Y-m-d H:i:s'), //現在の日時
+        ],
+        // 公開終了日が空の場合
+        [
+          'key' => 'end_date',
+          'value' => '', //compareは省略されているが、デフォルト "="
+        ],
+        // 公開終了日が存在していない場合
+        [
+          'key' => 'end_date',
+          'compare' => 'NOT EXISTS',
+        ],
+      ],
+    ];
+    $the_query = new WP_Query($args);
+    ?>
+    <?php if ($the_query->have_posts()): ?>
+      <div class="kv_slider js-slider">
+        <?php while ($the_query->have_posts()): $the_query->the_post(); ?>
+          <?php $pic = get_field('pic'); ?>
+          <div class="kv_sliderItem" style="background-image: url(<?= $pic; ?>);"></div>
+        <?php endwhile;
+        wp_reset_postdata(); ?>
+      </div>
+    <?php endif; ?>
     <div class="kv_overlay"></div>
 
     <div class="kv_scroll">

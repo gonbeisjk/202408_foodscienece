@@ -1,24 +1,35 @@
 <?php
 
-/**
- * タイトルタグを出力する
- */
-add_theme_support('title-tag');
+add_action('after_setup_theme', 'my_theme_support');
+function my_theme_support()
+{
+  /**
+   * タイトルタグを出力する
+   */
+  add_theme_support('title-tag');
 
-/**
- * アイキャッチ画像を使用可能にする
- */
-add_theme_support('post-thumbnails');
+  /**
+   * アイキャッチ画像を使用可能にする
+   */
+  add_theme_support('post-thumbnails');
 
-/**
- * カスタムメニュー機能を使用可能にする
- */
-add_theme_support('menus');
+  /**
+   * カスタムメニュー機能を使用可能にする
+   */
+  add_theme_support('menus');
 
-/**
- * HTML5をサポートする
- */
-add_theme_support('html5');
+  /**
+   * HTML5をサポートする
+   */
+  add_theme_support('html5');
+
+  /**
+   * ブロックエディターにCSSを読み込む
+   */
+  add_theme_support('editor-styles');
+  add_editor_style('assets/css/editor-style.css');
+}
+
 
 /**
  * タイトルの区切り文字を変更
@@ -103,4 +114,11 @@ function my_password_form()
   </form>
 XYZ;
   return $html;
+}
+
+
+add_filter('allowed_block_types_all', 'my_allowed_block_types_all', 1, 2);
+function my_allowed_block_types_all($allowed_blocks, $editor_context)
+{
+  // var_dump($allowed_blocks);
 }

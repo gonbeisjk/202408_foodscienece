@@ -1,0 +1,6 @@
+// フロント側のCSS
+@use './content';
+
+.content {
+  @include content.content-style;
+}
