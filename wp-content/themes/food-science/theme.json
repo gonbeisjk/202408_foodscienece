@@ -44,7 +44,9 @@
     }
   },
   "styles": {},
-  "patterns": [],
+  "patterns": [
+    "media-text-with-image-on-the-right-ja"
+  ],
   "customTemplates": [],
   "templateParts": []
 }

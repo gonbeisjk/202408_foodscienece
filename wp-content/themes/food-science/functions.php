@@ -122,3 +122,57 @@ function my_allowed_block_types_all($allowed_blocks, $editor_context)
 {
   // var_dump($allowed_blocks);
 }
+
+
+/**
+ * 管理画面の編集ページでGoogle Fontsを有効化する
+ *
+ * @return void
+ */
+function my_text_domain_add_editor_styles() {
+  $font_url = str_replace( ',', '%2C', 'https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Noto+Sans+JP:wght@100..900&family=Caveat:wght@400..700&display=swap' );
+  add_editor_style( $font_url );
+}
+add_action('admin_init', 'my_text_domain_add_editor_styles');
+
+
+add_action('admin_init', 'my_admin_init');
+function my_admin_init() {
+  $role = get_role('administrator');
+  // 権限の追加: $role->add_cap();
+  // 権限の削除: $role->remove_cap();
+  $role->add_cap('delete_foods');
+  $role->add_cap('delete_others_foods');
+  $role->add_cap('delete_private_foods');
+  $role->add_cap('delete_published_foods');
+  $role->add_cap('edit_foods');
+  $role->add_cap('edit_others_foods');
+  $role->add_cap('edit_private_foods');
+  $role->add_cap('edit_published_foods');
+  $role->add_cap('publish_foods');
+  $role->add_cap('read_private_foods');
+}
+
+
+/**
+ * REST API にカスタムフィールドのデータを追加
+ */
+add_action('rest_api_init', 'api_register_fields');
+function api_register_fields() {
+  // 価格
+  register_rest_field('food', 'price', [
+    'get_callback' => 'get_custom_field',
+    'update_callback' => null,
+    'schema' => null,
+  ]);
+  // カロリー
+  register_rest_field('food', 'calorie', [
+    'get_callback' => 'get_custom_field',
+    'update_callback' => null,
+    'schema' => null,
+  ]);
+}
+
+function get_custom_field($object, $field_name, $request) {
+  return get_post_meta($object['id'], $field_name, true);
+}
