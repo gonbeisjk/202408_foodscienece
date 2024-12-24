@@ -48,4 +48,5 @@ wp-config.php
 #/wp-content/themes
 
 .DS_Store
-/wp-content/upgrade
+/wp-content/
+!/wp-content/themes/food-science

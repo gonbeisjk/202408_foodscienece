@@ -129,15 +129,17 @@ function my_allowed_block_types_all($allowed_blocks, $editor_context)
  *
  * @return void
  */
-function my_text_domain_add_editor_styles() {
-  $font_url = str_replace( ',', '%2C', 'https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Noto+Sans+JP:wght@100..900&family=Caveat:wght@400..700&display=swap' );
-  add_editor_style( $font_url );
+function my_text_domain_add_editor_styles()
+{
+  $font_url = str_replace(',', '%2C', 'https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Noto+Sans+JP:wght@100..900&family=Caveat:wght@400..700&display=swap');
+  add_editor_style($font_url);
 }
 add_action('admin_init', 'my_text_domain_add_editor_styles');
 
 
 add_action('admin_init', 'my_admin_init');
-function my_admin_init() {
+function my_admin_init()
+{
   $role = get_role('administrator');
   // 権限の追加: $role->add_cap();
   // 権限の削除: $role->remove_cap();
@@ -158,7 +160,8 @@ function my_admin_init() {
  * REST API にカスタムフィールドのデータを追加
  */
 add_action('rest_api_init', 'api_register_fields');
-function api_register_fields() {
+function api_register_fields()
+{
   // 価格
   register_rest_field('food', 'price', [
     'get_callback' => 'get_custom_field',
@@ -173,6 +176,66 @@ function api_register_fields() {
   ]);
 }
 
-function get_custom_field($object, $field_name, $request) {
+function get_custom_field($object, $field_name, $request)
+{
   return get_post_meta($object['id'], $field_name, true);
+}
+
+
+// js, cssのロード
+add_action('wp_enqueue_scripts', 'my_enqueue_scripts');
+function my_enqueue_scripts()
+{
+  // css
+  wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css');
+  wp_enqueue_style('google-web-fonts', 'https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Noto+Sans+JP:wght@100..900&family=Caveat:wght@400..700&display=swap', [], null);
+
+  // js
+  wp_enqueue_script('jquery-cdn', 'https://code.jquery.com/jquery-3.7.1.min.js', [], false, [
+    'strategy' => 'defer',
+    'in_footer' => true,
+  ]);
+  wp_deregister_script('jquery');
+  wp_enqueue_script('food-science-main', get_template_directory_uri() . '/assets/js/main.js', ['jquery-cdn'], filemtime(get_template_directory() . '/assets/js/main.js'), [
+    'strategy' => 'defer',
+    'in_footer' => true,
+  ]);
+
+  // slick
+  if (is_home()) {
+    wp_enqueue_style(
+      'slick-carousel',
+      'https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css'
+    );
+    wp_enqueue_script(
+      'slick-carousel',
+      'https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js',
+      [],
+      false,
+      [
+        'in_footer' => true,
+        'strategy' => 'defer',
+      ]
+    );
+    wp_enqueue_script(
+      'food-science-home',
+      get_template_directory_uri() . '/assets/js/home.js',
+      [],
+      false,
+      [
+        'in_footer' => true,
+        'strategy' => 'defer',
+      ]
+    );
+  }
+}
+
+
+function my_display_thumbnail()
+{
+  if (has_post_thumbnail()):
+    the_post_thumbnail('medium');
+  else:
+    echo '<img src="' . get_template_directory_uri() . '/assets/img/common/noimage.png" alt="">';
+  endif;
 }

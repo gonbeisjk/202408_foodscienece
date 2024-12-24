@@ -110,19 +110,20 @@
         <h2 class="heading">メキシコ姉妹店 information</h2>
       </header>
       <div class="section_body">
-      <div class="cardList cardList-1row">
-        <?php 
-        switch_to_blog(2);
-        $args = [
-          'posts_per_page' => 3,
-        ];
-        $the_query = new WP_Query($args);
-        if($the_query->have_posts()): ?>
-          <?php while ($the_query->have_posts()): $the_query->the_post(); ?>
-            <?php get_template_part('template-parts/loop', 'news'); ?>
-          <?php endwhile; ?>
-        <?php endif; ?>
-        <?php restore_current_blog(); ?>
+        <div class="cardList cardList-1row">
+          <?php
+          // switch_to_blog(2);
+          // $args = [
+          //   'posts_per_page' => 3,
+          // ];
+          // $the_query = new WP_Query($args);
+          if ($the_query->have_posts()): ?>
+            <?php while ($the_query->have_posts()): $the_query->the_post(); ?>
+              <?php get_template_part('template-parts/loop', 'news'); ?>
+            <?php endwhile; ?>
+          <?php endif; ?>
+          <?php //restore_current_blog(); 
+          ?>
 
         </div>
       </div>
