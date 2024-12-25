@@ -195,7 +195,9 @@ function my_enqueue_scripts()
     'strategy' => 'defer',
     'in_footer' => true,
   ]);
-  wp_deregister_script('jquery');
+  if (!is_user_logged_in() && !is_admin()) {
+    wp_deregister_script('jquery');
+  }
   wp_enqueue_script('food-science-main', get_template_directory_uri() . '/assets/js/main.js', ['jquery-cdn'], filemtime(get_template_directory() . '/assets/js/main.js'), [
     'strategy' => 'defer',
     'in_footer' => true,
